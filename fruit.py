@@ -1,12 +1,41 @@
 import sys
 import ntpath
+import argparse
 
 #image
 import numpy as np
 import cv2
+import matplotlib
+matplotlib.use("WXAgg")
 from matplotlib import pyplot as plt
 
 from itertools import product
+
+flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
+
+#File handling/terminal input handling
+#this will get the file from the terminal input
+##create the arguemnt parse/parse the arguemnt
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--image", help = "path to the image")
+args = vars(ap.parse_args())
+#load the entered image
+#image = cv2.imread(args["image"])
+
+##main function to list each step/process
+def main():
+    colourDetect()
+
+#Colour Dectection
+#Simple colour detection will be handled within this function.
+def colourDetect():
+    image = cv2.imread("./mytestimgs/organic-apples.jpg")
+    plt.imshow(image)
+    plt.show()
+
+
+
+
 
 def example(r):
     #gray values
@@ -51,4 +80,8 @@ def pairs(p,arr):
 
 #example
 R = np.asarray([[0,0,1,1],[0,0,1,1],[0,2,2,2],[2,2,3,3]])
-example(R)
+#example(R)
+
+
+if __name__ == '__main__':
+    main()
