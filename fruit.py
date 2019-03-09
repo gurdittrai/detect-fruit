@@ -1,6 +1,7 @@
 import sys
 import ntpath
 import argparse
+import os.path
 
 #image
 import numpy as np
@@ -19,22 +20,36 @@ flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", help = "path to the image")
 args = vars(ap.parse_args())
-#load the entered image
-#image = cv2.imread(args["image"])
+
+#check if the image entered exists
+def imageVerify():
+    if not (os.path.isfile(args["image"])):
+        print("File does not exist. Check path/name.")
+        exit()
+
 
 ##main function to list each step/process
 def main():
+    imageVerify()
     colourDetect()
 
 #Colour Dectection
 #Simple colour detection will be handled within this function.
 def colourDetect():
-    image = cv2.imread("./mytestimgs/organic-apples.jpg")
-    plt.imshow(image)
+    #load the image
+    image = cv2.imread(args["image"])
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    img_hsv =cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    #detect colour space
+    lower_red = np.array([105,10,10])
+    upper_red = np.array([255,255,180])
+
+    mask = cv2.inRange(img_hsv, lower_red, upper_red)
+
+    result = cv2.bitwise_and(image, image, mask=mask)
+    plt.imshow(result)
     plt.show()
-
-
-
 
 
 def example(r):
