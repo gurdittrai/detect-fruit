@@ -1,3 +1,8 @@
+# Name: Andrew Maklingham, Gurditt Rai
+# Date: Sunday, March 10, 2019
+# Program Description
+# It detects all the fruits in the provided image
+
 import sys
 import ntpath
 
@@ -5,8 +10,6 @@ import ntpath
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-
-from itertools import product
 
 #Colour Dectection
 #Simple colour detection will be handled within this function.
@@ -29,11 +32,6 @@ name = ntpath.basename(fp)
 
 # open img
 image = cv2.imread(fp, 1)
-
-# red color detect
-# red = colourDetect(image)
-# img_red = cv2.cvtColor(red, cv2.COLOR_BGR2RGB)
-# cv2.imshow('red', img_red)
 
 # gray image
 img = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -62,12 +60,10 @@ for i in circles[0,:]:
     cropimg = image[y0:y1,x0:x1]
 
     # draw cropped image
-    cv2.imshow('cropped circles', cropimg)
+    # cv2.imshow('cropped circles', cropimg)
 
     # get red area
     redimg = colourDetect(cropimg)
-    cv2.imshow('color detection', redimg)
-    cv2.waitKey(0)
 
     #threshold to make comparsion easier
     ret,thresh1 = cv2.threshold(redimg,105,255,cv2.THRESH_BINARY)
@@ -91,18 +87,11 @@ for i in circles[0,:]:
     print percent
     if (percent > 35):
         count += 1
+        cv2.circle(image,center,radius,(0,255,0),2)
 
-for i in circles[0,:]:
-    # circle properties
-    center = (i[0],i[1])
-    radius = i[2]
 
-    # draw the outer circle
-    cv2.circle(image,center,radius,(0,255,0),2)
-    # count += 1
-
-print str(count) + ' circles'
-cv2.imshow('detected circles', image)
+title = str(count) + ' Fruits Detected'
+cv2.imshow(title, image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
