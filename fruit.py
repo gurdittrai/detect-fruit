@@ -92,6 +92,7 @@ for i in circles[0,:]:
 
 title = str(count) + ' Fruits Detected'
 cv2.imshow(title, image)
+cv2.imwrite("output.jpg", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
