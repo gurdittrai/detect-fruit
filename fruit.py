@@ -53,20 +53,13 @@ def pairs(p,arr):
 #example
 R = np.asarray([[0,0,1,1],[0,0,1,1],[0,2,2,2],[2,2,3,3]])
 example(R)
-=======
+
+
+##=======
 # Name: Andrew Maklingham, Gurditt Rai
 # Date: Sunday, March 10, 2019
 # Program Description
 # It detects all the fruits in the provided image
-
-import sys
-import ntpath
-
-#image
-import numpy as np
-import cv2
-from matplotlib import pyplot as plt
-
 
 fruits = ["banana", "apple", "pear", "strawberry", "tomato", "Bell pepper"]
 
