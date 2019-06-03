@@ -1,4 +1,5 @@
 import io
+import sys
 import os
 
 #Import the Google Cloud client library
@@ -6,13 +7,19 @@ from google.cloud import vision
 from google.cloud.vision import types
 from PIL import Image, ImageDraw
 
+if len(sys.argv) != 2:
+    print("Please enter one file path")
+    exit(0)
+
+path = sys.argv[1]
+
 #Instantiates a client
 client = vision.ImageAnnotatorClient()
 
 #The name of the image file to annotate
 file_name = os.path.join(
     os.path.dirname(__file__),
-    './mytestimgs/GreenBanana04.jpg')
+    path)
 
 #Loads the image into memory
 with io.open(file_name, 'rb') as image_file:
@@ -53,30 +60,33 @@ def localize_objects(path):
     with open(path, 'rb') as image_file:
         content = image_file.read()
     image = vision.types.Image(content=content)
-    im = Image.open('./mytestimgs/GreenBanana04.jpg')
+    im = Image.open(path)
     width, height = im.size
     objects = client.object_localization(
         image=image).localized_object_annotations
 
-    print('Number of objects found: {}'.format(len(objects)))
+    fruits = ["banana", "apple", "pear", "strawberry", "tomato", "bell pepper"]
+
+    #print('Number of objects found: {}'.format(len(objects)))
     for object_ in objects:
-        print('\n{} (confidence: {})'.format(object_.name, object_.score))
-        print('Normalized bounding polygon vertices: ')
-        x1 = 0
-        x2 = 0
-        y1 = 0
-        y2 = 0
-        count = 0
+        if object_.name.lower() in fruits:
+            print('\n{} (confidence: {})'.format(object_.name, object_.score))
+            print('Normalized bounding polygon vertices: ')
+            x1 = 0
+            x2 = 0
+            y1 = 0
+            y2 = 0
+            count = 0
 
-        for vertex in object_.bounding_poly.normalized_vertices:
-            if count == 0:
-                x1 = vertex.x
-                y1 = vertex.y
-            elif count == 2:
-                x2 = vertex.x
-                y2 = vertex.y
-            count = count + 1
-            print(' - ({}, {})'.format(vertex.x, vertex.y))
-        draw_boxes(im, (x1 * width), (x2 * width), (y1 * height), (y2 * height))
+            for vertex in object_.bounding_poly.normalized_vertices:
+                if count == 0:
+                    x1 = vertex.x
+                    y1 = vertex.y
+                elif count == 2:
+                    x2 = vertex.x
+                    y2 = vertex.y
+                count = count + 1
+                print(' - ({}, {})'.format(vertex.x, vertex.y))
+            draw_boxes(im, (x1 * width), (x2 * width), (y1 * height), (y2 * height))
 
-localize_objects('./mytestimgs/GreenBanana04.jpg')
+localize_objects(path)

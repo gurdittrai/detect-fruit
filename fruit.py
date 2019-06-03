@@ -11,6 +11,10 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
+
+fruits = ["banana", "apple", "pear", "strawberry", "tomato", "Bell pepper"]
+
+
 #Colour Dectection
 #Simple colour detection will be handled within this function.
 def colourDetect(img):
